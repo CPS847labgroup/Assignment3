@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-filter-date-production</title>
+  
+
+  <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+  
+
+  
+</head>
+<body ng-app="myApp">
+   <div ng-app="myApp">
+      <div ng-controller="myController">
+        <h3>{{today | date:'yyyy-MM-dd'}}</h3>
+        <h3>{{today | date:'HH:mm:ss'}}</h3>
+      </div>
+    </div>
+  
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myController', function($scope){
+      $scope.today = new Date();
+    });
+  </script>
+</body>
+</html>
