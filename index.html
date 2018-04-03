@@ -1,28 +1,80 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Example - example-filter-date-production</title>
-  
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
-  
-
-  
-</head>
 <body ng-app="myApp">
-   <div ng-app="myApp">
-      <div ng-controller="myController">
-        <h3>{{today | date:'yyyy-MM-dd'}}</h3>
-        <h3>{{today | date:'HH:mm:ss'}}</h3>
-      </div>
-    </div>
-  
-  <script>
-    var app = angular.module('myApp', []);
-    app.controller('myController', function($scope){
-      $scope.today = new Date();
+
+<header id="navbar" ng-include="'header.html'"></header> 
+
+<div style="width: 64%; margin-left: 18%; background-color: #fff; " ng-view></div>
+
+<script>
+var app = angular.module("myApp", ["ngRoute"]);
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "views/home.html",
+		controller: "myController"
+    })
+    .when("/about", {
+        templateUrl : "views/about.html"
+    })
+    .when("/customers", {
+        templateUrl : "views/customers.html"
+    })
+    .when("/services", {
+        templateUrl : "views/services.html"
+    })
+    .otherwise({
+        redirectTo: "/"
     });
-  </script>
+});
+
+app.controller("myController", function($scope){
+      $scope.today = new Date();
+	  $scope.$on('$viewContentLoaded', function(){
+			var ourRequest = new XMLHttpRequest();
+			var url =  "http://api.wunderground.com/api/0b6576a91b916ea5/conditions/q/zmw:00000.176.71508.json";
+			ourRequest.open('GET', url);
+			ourRequest.onload = function(){
+				if(ourRequest.status>=200 && ourRequest.status<400){
+						var ourData = JSON.parse(ourRequest.responseText);
+						console.log(ourData);
+						gogo (ourData);
+				}
+				else{
+						console.log("server error");
+				}
+			};
+			ourRequest.onerror = function(){
+				console.log("connection fail");
+			}
+			ourRequest.send();
+			function gogo (ourData){
+			var temp = ourData.current_observation.temp_c;
+			var wind = ourData.current_observation.wind_kph;
+			var feels = ourData.current_observation.feelslike_c;
+			var iurl = ourData.current_observation.icon_url;
+			var city = ourData.current_observation.display_location.city;
+			var cond = ourData.current_observation.icon;
+			var hum = ourData.current_observation.relative_humidity;
+			console.log(temp+" C, "+wind+" kph, "+ feels +" C");
+			var currstring = "<h3>"+city+"</h3><h1>"+temp+" &#8451;</h1><img src="+iurl+"><h4>"+cond+"</h4><h5>Windspeed: "+wind+" km/h</h5><h5>Humidity: "+hum+" </h5>" ;
+			var current = document.getElementById("weather");
+			current.innerHTML = "";
+			current.insertAdjacentHTML("beforeend", currstring);
+		}
+		});
+    });
+</script>
+
+
+
 </body>
 </html>
