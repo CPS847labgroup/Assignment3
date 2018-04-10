@@ -1,0 +1,20 @@
+*{
+	font-family: 'Varela Round', sans-serif;
+}
+#weather{
+	background-color: #734B5E;
+	text-align: center;
+	color: #FBF5F3;
+}
+#datetime{
+	background-color: #BCBDC0;
+	text-align: center;
+}
+body{
+	background-color: #086375;
+
+}
+p{
+	background-color: #BCBDC0;
+	font-size: 16px;
+}

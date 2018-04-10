@@ -1,7 +1,6 @@
 <div ng-app="myApp">
-<div ng-controller="myController">
-        <h3>{{today | date:'yyyy-MM-dd'}}</h3>
-        <h3>{{today | date:'HH:mm:ss'}}</h3>
+<div ng-controller="myController" id="datetime">
+        <h3>{{today | date:'yyyy-MM-dd'}} &nbsp;&nbsp;&nbsp; {{today | date:'HH:mm:ss'}}</h3>
   </div>
   <div id="weather"></div>
 </div>
